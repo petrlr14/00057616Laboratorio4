@@ -1,20 +1,45 @@
 #include <iostream>
+#include <fstream>
 #include "math_tools.h"
 #include "display_tools.h"
+#include "classes.h"
+
+using namespace std;
+
+void readCoordinates(ifstream& file, int n, item* item_list) {
+  int e;
+  float r;
+  for (int i = 0; i < n; i++) {
+    file >> e >> r;
+    item_list[i].setIntFloat(e, r);
+  }
+}
 
 int main() {
-  Matrix eg, R;
-  zeroes(eg, 3);
-  eg.at(0).at(0) = 2;
-  eg.at(0).at(1) = 2;
-  eg.at(0).at(2) = 3;
-  eg.at(1).at(0) = 4;
-  eg.at(1).at(1) = 5;
-  eg.at(1).at(2) = 6;
-  eg.at(2).at(0) = 7;
-  eg.at(2).at(1) = 8;
-  eg.at(2).at(2) = 9;
-  inverse(eg, R);
-  showMatrix(R);
+  char filename[10];
+  string line;
+  mesh m;
+  ifstream file;
+  float k, Q;
+  int nnodes, neltos, ndirich, nneu;
+
+  do {
+    cout << "Ingrese el noombre del archivo: ";
+    cin >> filename;
+    file.open(filename);
+  } while (!file);
+
+  file >> k >> Q;
+  file >> nnodes >> neltos >> ndirich >> nneu;
+  file >> line;
+  file >> line;
+  m.setParameters(k, Q);
+  m.setSizes(nnodes, neltos, ndirich, nneu);
+  m.createData();
+  readCoordinates(file, nnodes, m.getNodes());
+  file.close();
+  for (int i = 0; i < nnodes; i++) {
+    cout << m.getNode(i).getX() << "\n";
+  }
   return 0;
 }
