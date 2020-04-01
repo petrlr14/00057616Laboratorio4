@@ -1,7 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include "math_tools.h"
-#include "display_tools.h"
 #include "classes.h"
 
 using namespace std;
