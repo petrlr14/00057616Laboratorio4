@@ -1,5 +1,5 @@
 enum lines { NOLINE, SINGLELINE, DOUBLELINE };
-enum modes { NOMODE, INT_FLOAT, INT_INT };
+enum modes { NOMODE, INT_FLOAT, INT_INT_INT };
 enum parameters { THERMAL_CONDUCTIVITY, HEAT_SOURCE };
 enum sizes { NODES, ELEMENTS, DIRICHLET, NEUMANN };
 

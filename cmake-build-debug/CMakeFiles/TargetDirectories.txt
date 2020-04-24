@@ -1,0 +1,3 @@
+/Users/petrlr14/Documents/simu/practica1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/petrlr14/Documents/simu/practica1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/petrlr14/Documents/simu/practica1/cmake-build-debug/CMakeFiles/practica1.dir

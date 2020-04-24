@@ -1,43 +1,48 @@
 #include <iostream>
-#include <fstream>
+#include "math_tools.h"
 #include "classes.h"
+#include "display_tools.h"
+#include "tools.h"
+#include "sel.h"
+
+void about();
 
 using namespace std;
 
-void readCoordinates(ifstream& file, int n, item* item_list) {
-  int e;
-  float r;
-  for (int i = 0; i < n; i++) {
-    file >> e >> r;
-    item_list[i].setIntFloat(e, r);
-  }
+int main() {
+    about();
+    mesh mesh;
+    Matrix K;
+    Vector b;
+    Vector T;
+    vector<Matrix> localKs;
+    vector<Vector> localBs;
+
+    readMeshAndConditions(mesh);
+    cout<<"que pex";
+//    zeroes(K, mesh.getSize(NODES));
+//    zeroes(b, mesh.getSize(NODES));
+//
+//    createLocalSystem(mesh, localKs, localBs);
+//    assembly(mesh, localKs, localBs, K, b);
+//
+//    applyNeumann(mesh, b);
+//    applyDirichlet(mesh, K, b);
+//
+//    zeroes(T, b.size());
+//    calculate(K, b, T);
+//
+//    cout << "La respuesta es:" << endl;
+//    showVector(T);
+
+    return 0;
 }
 
-int main() {
-  char filename[10];
-  string line;
-  mesh m;
-  ifstream file;
-  float k, Q;
-  int nnodes, neltos, ndirich, nneu;
-
-  do {
-    cout << "Ingrese el noombre del archivo: ";
-    cin >> filename;
-    file.open(filename);
-  } while (!file);
-
-  file >> k >> Q;
-  file >> nnodes >> neltos >> ndirich >> nneu;
-  file >> line;
-  file >> line;
-  m.setParameters(k, Q);
-  m.setSizes(nnodes, neltos, ndirich, nneu);
-  m.createData();
-  readCoordinates(file, nnodes, m.getNodes());
-  file.close();
-  for (int i = 0; i < nnodes; i++) {
-    cout << m.getNode(i).getX() << "\n";
-  }
-  return 0;
+void about() {
+    cout << "Implementacion de los metodos finitos" << endl;
+    cout << "\t-Transferencia de calor." << endl;
+    cout << "\t-1 dimension." << endl;
+    cout << "\t-Funciones de forma lineales." << endl;
+    cout << "\t-Pesos de Galerkin." << endl;
+    cout << "************************************************" << endl;
 }
