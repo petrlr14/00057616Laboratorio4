@@ -26,16 +26,16 @@ void getData(ifstream &file, int lines, int n, int mode, item *itemList) {
 void readMeshAndConditions(mesh &mesh) {
     char filename[11];
     ifstream file;
-    float k, Q;
+    float E, A, f;
     int nnodes, nelem, ndirch, nneu;
     do {
         cout << "Ingrese nombre del archivo: ";
         cin >> filename;
         file.open(filename);
     } while (!file);
-    file >> k >> Q;
+    file >> E >> A >> f;
     file >> nnodes >> nelem >> ndirch >> nneu;
-    mesh.setParameters(k, Q);
+    mesh.setParameters((E*A), f);
     mesh.setSizes(nnodes, nelem, ndirch, nneu);
     mesh.createData();
     getData(file, SINGLELINE, nnodes, INT_FLOAT, mesh.getNodes());
