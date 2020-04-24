@@ -19,21 +19,21 @@ int main() {
     vector<Vector> localBs;
 
     readMeshAndConditions(mesh);
-    cout<<"que pex";
-//    zeroes(K, mesh.getSize(NODES));
-//    zeroes(b, mesh.getSize(NODES));
-//
-//    createLocalSystem(mesh, localKs, localBs);
-//    assembly(mesh, localKs, localBs, K, b);
-//
-//    applyNeumann(mesh, b);
-//    applyDirichlet(mesh, K, b);
-//
-//    zeroes(T, b.size());
-//    calculate(K, b, T);
-//
-//    cout << "La respuesta es:" << endl;
-//    showVector(T);
+    
+    zeroes(K, mesh.getSize(NODES));
+    zeroes(b, mesh.getSize(NODES));
+
+    createLocalSystem(mesh, localKs, localBs);
+    
+    assembly(mesh, localKs, localBs, K, b);
+    applyNeumann(mesh, b);
+    applyDirichlet(mesh, K, b);
+
+    zeroes(T, b.size());
+    calculate(K, b, T);
+
+    cout << "La respuesta es:" << endl;
+    showVector(T);
 
     return 0;
 }

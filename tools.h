@@ -1,6 +1,6 @@
 #include <fstream>
 
-void getData(istream &file, int lines, int n, int mode, item *itemList) {
+void getData(ifstream &file, int lines, int n, int mode, item *itemList) {
     string line;
     file >> line;
     if (lines == DOUBLELINE) {
@@ -12,13 +12,11 @@ void getData(istream &file, int lines, int n, int mode, item *itemList) {
                 int e;
                 float f;
                 file >> e >> f;
-                cout<<e<<" "<<f<<endl;
                 itemList[i].setIntFloat(e, f);
                 break;
             case INT_INT_INT:
                 int e1, e2, e3;
                 file >> e1 >> e2 >> e3;
-                cout<<e1<<" "<<e2<<" "<<e3<<endl;
                 itemList[i].setIntIntInt(e1, e2, e3);
                 break;
         }
@@ -44,7 +42,6 @@ void readMeshAndConditions(mesh &mesh) {
     getData(file, DOUBLELINE, nelem, INT_INT_INT, mesh.getElements());
     getData(file, DOUBLELINE, ndirch, INT_FLOAT, mesh.getDirichlet());
     getData(file, DOUBLELINE, nneu, INT_FLOAT, mesh.getNeumann());
-    cout<<"Que paso ";
+
     file.close();
-    cout<<"Que paso ";
 }

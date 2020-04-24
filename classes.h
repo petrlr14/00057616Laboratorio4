@@ -68,7 +68,7 @@ class mesh {
   }
   int getSize(int s) { return sizes[s]; }
 
-  float getParamenter(int p) { return parameters[p]; }
+  float getParameter(int p) { return parameters[p]; }
 
   void createData() {
     node_list = new node[sizes[NODES]];
