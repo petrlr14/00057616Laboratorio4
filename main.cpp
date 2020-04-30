@@ -10,39 +10,39 @@ void about();
 using namespace std;
 
 int main() {
-    about();
-    mesh mesh;
-    Matrix K;
-    Vector b;
-    Vector T;
-    vector<Matrix> localKs;
-    vector<Vector> localBs;
+  about();
+  mesh mesh;
+  Matrix K;
+  Vector b;
+  Vector T;
+  vector<Matrix> localKs;
+  vector<Vector> localBs;
 
-    readMeshAndConditions(mesh);
-    
-    zeroes(K, mesh.getSize(NODES));
-    zeroes(b, mesh.getSize(NODES));
+  readMeshAndConditions(mesh);
 
-    createLocalSystem(mesh, localKs, localBs);
-    
-    assembly(mesh, localKs, localBs, K, b);
-    applyNeumann(mesh, b);
-    applyDirichlet(mesh, K, b);
+  createLocalSystem(mesh, localKs, localBs);
+  cout << "Se creo el sistema local" << endl;
+  zeroes(K, mesh.getSize(NODES) * 2);
+  zeroes(b, mesh.getSize(NODES) * 2);
+  assembly(mesh, localKs, localBs, K, b);
+  applyDirichlet(mesh, K, b);
 
-    zeroes(T, b.size());
-    calculate(K, b, T);
+  showMatrix(K);
 
-    cout << "La respuesta es:" << endl;
-    showVector(T);
+  /* zeroes(T, b.size());
+  calculate(K, b, T);
 
-    return 0;
+  cout << "La respuesta es:" << endl;
+  showVector(T); */
+
+  return 0;
 }
 
 void about() {
-    cout << "Implementacion de los metodos finitos" << endl;
-    cout << "\t-Transferencia de calor." << endl;
-    cout << "\t-1 dimension." << endl;
-    cout << "\t-Funciones de forma lineales." << endl;
-    cout << "\t-Pesos de Galerkin." << endl;
-    cout << "************************************************" << endl;
+  cout << "Implementacion de los metodos finitos" << endl;
+  cout << "\t-Ecuaciones de Navier-Stokes." << endl;
+  cout << "\t-1 dimension." << endl;
+  cout << "\t-Funciones de forma lineales." << endl;
+  cout << "\t-Pesos de Galerkin." << endl;
+  cout << "************************************************" << endl;
 }
