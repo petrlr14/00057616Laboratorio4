@@ -1,86 +1,109 @@
 void createLocalA(Matrix &A, mesh m) {
-  float u_bar = m.getParameter(ADJECTIVE_VELOCITY);
-  A.at(0).at(0) += -u_bar / 2;
-  A.at(0).at(1) += u_bar / 2;
-  A.at(1).at(0) += -u_bar / 2;
-  A.at(1).at(1) += u_bar / 2;
+  float pi = m.getParameter(PI) / 8;
+  A.at(0).at(0) += -pi;
+  A.at(0).at(1) += pi;
+  A.at(1).at(0) += -pi;
+  A.at(1).at(1) += pi;
 }
 
 void createLocalB(Matrix &B, mesh m) {
   float l = m.getParameter(ELEMENT_LENGTH);
-  float nu = m.getParameter(DYNAMIC_VISCOSITY);
-  B.at(0).at(0) += nu / l;
-  B.at(0).at(1) += -nu / l;
-  B.at(1).at(0) += -nu / l;
-  B.at(1).at(1) += nu / l;
+  float kappa = m.getParameter(KAPPA) / l;
+  B.at(0).at(0) += kappa;
+  B.at(0).at(1) += -kappa;
+  B.at(1).at(0) += -kappa;
+  B.at(1).at(1) += kappa;
 }
 
 void createLocalC(Matrix &C, mesh m) {
-  float rho = m.getParameter(DENSITY);
-  C.at(0).at(0) += -1 / (2 * rho);
-  C.at(0).at(1) += 1 / (2 * rho);
-  C.at(1).at(0) += -1 / (2 * rho);
-  C.at(1).at(1) += 1 / (2 * rho);
+  float lambda = m.getParameter(LAMBDA) / 3;
+  C.at(0).at(0) += -lambda;
+  C.at(0).at(1) += lambda;
+  C.at(1).at(0) += -lambda;
+  C.at(1).at(1) += lambda;
 }
 
 void createLocalD(Matrix &D, mesh m) {
-  D.at(0).at(0) += -0.5;
-  D.at(0).at(1) += 0.5;
-  D.at(1).at(0) += -0.5;
-  D.at(1).at(1) += 0.5;
+  float l = m.getParameter(ELEMENT_LENGTH);
+  float ipsilon = m.getParameter(IPSILON) / l;
+  D.at(0).at(0) += ipsilon;
+  D.at(0).at(1) += -ipsilon;
+  D.at(1).at(0) += -ipsilon;
+  D.at(1).at(1) += ipsilon;
+}
+
+void createLocalE(Matrix &E, mesh m) {
+  float alpha = 3 * m.getParameter(ALPHA) / 2;
+  E.at(0).at(0) += -alpha;
+  E.at(0).at(1) += alpha;
+  E.at(1).at(0) += -alpha;
+  E.at(1).at(1) += alpha;
+}
+
+void createLocalF(Matrix &F, mesh m) {
+  float delta = m.getParameter(DELTA) / 2;
+  F.at(0).at(0) += -delta;
+  F.at(0).at(1) += delta;
+  F.at(1).at(0) += -delta;
+  F.at(1).at(1) += delta;
 }
 
 Matrix createLocalK(int element, mesh &m) {
-  Matrix K, A, B, C, D;
+  Matrix K, A, B, C, D, E, F;
 
   zeroes(A, 2);
   zeroes(B, 2);
   zeroes(C, 2);
   zeroes(D, 2);
+  zeroes(E, 2);
+  zeroes(F, 2);
+
   createLocalA(A, m);
   createLocalB(B, m);
   createLocalC(C, m);
   createLocalD(D, m);
+  createLocalE(E, m);
+  createLocalF(F, m);
 
   Vector row1, row2, row3, row4;
 
   row1.push_back(A.at(0).at(0) + B.at(0).at(0));
   row1.push_back(A.at(0).at(1) + B.at(0).at(1));
-  row1.push_back(C.at(0).at(0));
-  row1.push_back(C.at(0).at(1));
+  row1.push_back(C.at(0).at(0) + D.at(0).at(0));
+  row1.push_back(C.at(0).at(1) + D.at(0).at(1));
 
   row2.push_back(A.at(1).at(0) + B.at(1).at(0));
   row2.push_back(A.at(1).at(1) + B.at(1).at(1));
-  row2.push_back(C.at(1).at(0));
-  row2.push_back(C.at(1).at(1));
+  row2.push_back(C.at(1).at(0) + D.at(1).at(0));
+  row2.push_back(C.at(1).at(1) + D.at(1).at(1));
 
-  row3.push_back(D.at(0).at(0));
-  row3.push_back(D.at(0).at(1));
-  row3.push_back(0);
-  row3.push_back(0);
+  row3.push_back(E.at(0).at(0));
+  row3.push_back(E.at(0).at(1));
+  row3.push_back(F.at(0).at(0));
+  row3.push_back(F.at(0).at(1));
 
-  row4.push_back(D.at(1).at(0));
-  row4.push_back(D.at(1).at(1));
-  row4.push_back(0);
-  row4.push_back(0);
+  row4.push_back(E.at(1).at(0));
+  row4.push_back(E.at(1).at(1));
+  row4.push_back(F.at(1).at(0));
+  row4.push_back(F.at(1).at(1));
 
   K.push_back(row1);
   K.push_back(row2);
   K.push_back(row3);
   K.push_back(row4);
-
   return K;
 }
 
 Vector createLocalb(int element, mesh &m) {
   Vector b;
 
-  float f = m.getParameter(EXTERNAL_FORCE), l = m.getParameter(ELEMENT_LENGTH);
+  float l = m.getParameter(ELEMENT_LENGTH), psi = m.getParameter(PSI) * l,
+        eta = m.getParameter(ETA) * l;
 
-  b.push_back(f * l / 2);
-  b.push_back(f * l / 2);
-  b.push_back(0);
-  b.push_back(0);
+  b.push_back(psi / 2);
+  b.push_back(psi / 2);
+  b.push_back(eta / 2);
+  b.push_back(eta / 2);
 
   return b;
 }
@@ -112,6 +135,11 @@ void assemblyK(element e, Matrix localK, Matrix &K, int nnodes) {
   K.at(index3).at(index2) += localK.at(2).at(1);
   K.at(index4).at(index1) += localK.at(3).at(0);
   K.at(index4).at(index2) += localK.at(3).at(1);
+
+  K.at(index3).at(index3) += localK.at(2).at(2);
+  K.at(index3).at(index4) += localK.at(2).at(3);
+  K.at(index4).at(index3) += localK.at(3).at(2);
+  K.at(index4).at(index4) += localK.at(3).at(3);
 }
 
 void assemblyb(element e, Vector localb, Vector &b) {

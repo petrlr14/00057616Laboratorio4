@@ -19,9 +19,7 @@ int main() {
   vector<Vector> localBs;
 
   readMeshAndConditions(mesh);
-
   createLocalSystem(mesh, localKs, localBs);
-  cout << "Se creo el sistema local" << endl;
   zeroes(K, mesh.getSize(NODES) * 2);
   zeroes(b, mesh.getSize(NODES) * 2);
   assembly(mesh, localKs, localBs, K, b);

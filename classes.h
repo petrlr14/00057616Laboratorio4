@@ -2,10 +2,14 @@ enum lines { NOLINE, SINGLELINE, DOUBLELINE };
 enum modes { NOMODE, INT_FLOAT, INT_INT_INT };
 enum parameters {
   ELEMENT_LENGTH,
-  ADJECTIVE_VELOCITY,
-  DYNAMIC_VISCOSITY,
-  DENSITY,
-  EXTERNAL_FORCE
+  PI,
+  KAPPA,
+  LAMBDA,
+  IPSILON,
+  PSI,
+  ALPHA,
+  DELTA,
+  ETA
 };
 enum sizes { NODES, ELEMENTS, DIRICHLET };
 
@@ -75,19 +79,25 @@ class condition : public item {
 };
 
 class mesh {
-  float parameters[5];
+  float parameterss[9];
   int sizes[3];
   node *node_list;
   element *element_list;
   condition *dirichlet_list;
 
  public:
-  void setParameters(float l, float u_bar, float nu, float rho, float f) {
-    parameters[ELEMENT_LENGTH] = l;
-    parameters[ADJECTIVE_VELOCITY] = u_bar;
-    parameters[DYNAMIC_VISCOSITY] = nu;
-    parameters[DENSITY] = rho;
-    parameters[EXTERNAL_FORCE] = f;
+  void setParameters(float l, float pi, float kappa, float lambda,
+                     float ipsilon, float psi, float alpha, float delta,
+                     float eta) {
+    parameterss[ELEMENT_LENGTH] = l;
+    parameterss[PI] = pi;
+    parameterss[KAPPA] = kappa;
+    parameterss[LAMBDA] = lambda;
+    parameterss[IPSILON] = ipsilon;
+    parameterss[PSI] = psi;
+    parameterss[ALPHA] = alpha;
+    parameterss[DELTA] = delta;
+    parameterss[ETA] = eta;
   }
 
   void setSizes(int nnodes, int nelm, int ndirch) {
@@ -98,7 +108,7 @@ class mesh {
 
   int getSize(int s) { return sizes[s]; }
 
-  float getParameter(int p) { return parameters[p]; }
+  float getParameter(int p) { return parameterss[p]; }
 
   void createData() {
     node_list = new node[sizes[NODES]];

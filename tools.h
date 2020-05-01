@@ -48,7 +48,7 @@ void correctConditions(int n, condition *list) {
 void readMeshAndConditions(mesh &m) {
   char filename[14];
   ifstream file;
-  float l, u_bar, nu, rho, f;
+  float l, pi, kappa, lambda, ipsilon, psi, alpha, delta, eta;
   int nnodes, neltos, ndirich_u, ndirich_p;
 
   condition *dirichlet_u_list;
@@ -61,10 +61,10 @@ void readMeshAndConditions(mesh &m) {
     file.open(filename);
   } while (!file);
 
-  file >> l >> u_bar >> nu >> rho >> f;
+  file >> l >> pi >> kappa >> lambda >> ipsilon >> psi >> alpha >> delta >> eta;
   file >> nnodes >> neltos >> ndirich_u >> ndirich_p;
 
-  m.setParameters(l, u_bar, nu, rho, f);
+  m.setParameters(l, pi, kappa, lambda, ipsilon, psi, alpha, delta, eta);
   m.setSizes(nnodes, neltos, ndirich_u + ndirich_p);
   m.createData();
 
@@ -75,9 +75,7 @@ void readMeshAndConditions(mesh &m) {
   getData(file, DOUBLELINE, neltos, INT_INT_INT, m.getElements());
   getData(file, DOUBLELINE, ndirich_u, INT_FLOAT, dirichlet_u_list);
   getData(file, DOUBLELINE, ndirich_p, INT_FLOAT, dirichlet_p_list);
-
   file.close();
-
   updateConditionNodes(ndirich_p, dirichlet_p_list, nnodes);
   joinConditions(m.getDirichlet(), ndirich_u, ndirich_p, dirichlet_u_list,
                  dirichlet_p_list);
